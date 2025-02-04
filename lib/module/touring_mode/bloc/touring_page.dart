@@ -13,15 +13,15 @@ class TouringModePage extends StatefulWidget {
 
 class _TouringModePageState extends State<TouringModePage> {
   bool _permissionsGranted = false;
-  bool _isTouring = false;
+  bool _showMusicList = true;
 
   @override
   void initState() {
     super.initState();
-    _checkAndRequestStoragePermission();
+     _checkAndRequestStoragePermission();
   }
 
-  Future<void> _checkAndRequestStoragePermission() async {
+    Future<void> _checkAndRequestStoragePermission() async {
     if (await Permission.manageExternalStorage.isGranted) {
       setState(() {
         _permissionsGranted = true;
@@ -54,135 +54,102 @@ class _TouringModePageState extends State<TouringModePage> {
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Music Player (Left Side)
             if (_permissionsGranted)
               Expanded(
                 flex: 1,
                 child: BlocBuilder<TouringBloc, TouringState>(
                   builder: (context, state) {
+                    List<String> musicFiles = [];
+                    String? currentTrack;
+                    bool isPlaying = false;
+
                     if (state is TouringMusicLoaded) {
-                      final musicFiles = state.musicFiles;
-
-                      if (musicFiles.isEmpty) {
-                        return const Center(
-                          child: Text(
-                            'No music files found',
-                            style: TextStyle(fontSize: 14, color: Colors.white),
-                          ),
-                        );
-                      }
-
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Music Player',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: musicFiles.length,
-                                itemBuilder: (context, index) {
-                                  final filePath = musicFiles[index];
-                                  final fileName = filePath.split('/').last;
-
-                                  return ListTile(
-                                    title: Text(
-                                      fileName,
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.white),
-                                    ),
-                                    trailing: IconButton(
-                                      icon: const Icon(Icons.play_arrow,
-                                          color: Colors.white),
-                                      onPressed: () {
-                                        context
-                                            .read<TouringBloc>()
-                                            .add(PlayMusic(filePath));
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      musicFiles = state.musicFiles;
+                    } else if (state is TouringMusicPlaying) {
+                      currentTrack = state.currentTrack;
+                      isPlaying = true;
+                      _showMusicList = false;
+                    } else if (state is TouringMusicPaused) {
+                      currentTrack = state.currentTrack;
+                      isPlaying = false;
                     }
 
-                    if (state is TouringMusicPlaying ||
-                        state is TouringMusicPaused) {
-                      final currentTrack = state is TouringMusicPlaying
-                          ? state.currentTrack
-                          : (state as TouringMusicPaused).currentTrack;
-
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Lottie.asset(
-                              'assets/lottie/music.json',
-                              height: 150,
-                              fit: BoxFit.contain,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              'Now Playing: ${currentTrack}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.pause,
-                                      color: Colors.white),
-                                  onPressed: () {
-                                    context
-                                        .read<TouringBloc>()
-                                        .add(PauseMusic());
+                    return Column(
+                      children: [
+                        Lottie.asset(
+                          'assets/lottie/music.json',
+                          height: 150,
+                          fit: BoxFit.contain,
+                        ),
+                        Expanded(
+                          child: _showMusicList
+                              ? ListView.builder(
+                                  itemCount: musicFiles.length,
+                                  itemBuilder: (context, index) {
+                                    final filePath = musicFiles[index];
+                                    final fileName = filePath.split('/').last;
+                                    return ListTile(
+                                      title: Text(
+                                        fileName,
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.white),
+                                      ),
+                                      trailing: IconButton(
+                                        icon: Icon(
+                                          currentTrack == filePath && isPlaying
+                                              ? Icons.pause
+                                              : Icons.play_arrow,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          if (currentTrack == filePath && isPlaying) {
+                                            context.read<TouringBloc>().add(PauseMusic());
+                                          } else {
+                                            context.read<TouringBloc>().add(PlayMusic(filePath));
+                                          }
+                                        },
+                                      ),
+                                    );
                                   },
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.play_arrow,
-                                      color: Colors.white),
-                                  onPressed: () {
-                                    if (state is TouringMusicPaused) {
-                                      context
-                                          .read<TouringBloc>()
-                                          .add(PlayMusic(state.currentTrack));
+                                )
+                              : GestureDetector(
+                                  onVerticalDragUpdate: (details) {
+                                    if (details.primaryDelta! < -10) {
+                                      setState(() {
+                                        _showMusicList = true;
+                                      });
                                     }
                                   },
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        'Now Playing: $currentTrack',
+                                        style: const TextStyle(color: Colors.white),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(
+                                          isPlaying ? Icons.pause : Icons.play_arrow,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          if (isPlaying) {
+                                            context.read<TouringBloc>().add(PauseMusic());
+                                          } else {
+                                            context.read<TouringBloc>().add(PlayMusic(currentTrack!));
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-
-                    return const CircularProgressIndicator(color: Colors.white);
+                        )
+                      ],
+                    );
                   },
                 ),
-              )
-            else
-              const Center(
-                child: Text(
-                  'Storage permission is required. Please grant access.',
-                  style: TextStyle(color: Colors.red),
-                ),
               ),
-
-            // Speedometer (Right Side)
             Expanded(
               flex: 1,
               child: BlocBuilder<TouringBloc, TouringState>(
