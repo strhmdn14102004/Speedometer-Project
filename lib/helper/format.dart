@@ -5,7 +5,9 @@ import "package:jiffy/jiffy.dart";
 
 class Formats {
   static String coalesce(String? value, {String? defaultString}) {
-    return StringUtils.isNotNullOrEmpty(value) ? value! : defaultString ?? "N/A";
+    return StringUtils.isNotNullOrEmpty(value)
+        ? value!
+        : defaultString ?? "N/A";
   }
 
   static Jiffy? tryParseJiffy(String? value, {String pattern = "yyyy-MM-dd"}) {
@@ -68,7 +70,6 @@ class Formats {
     }
   }
 
-
   static String dateDetail(Jiffy? jiffy) {
     if (jiffy != null) {
       return jiffy.format(pattern: "dd-MM-yyyy");
@@ -84,5 +85,4 @@ class Formats {
       return "N/A";
     }
   }
-
 }

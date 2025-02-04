@@ -1,12 +1,11 @@
-
 import "package:flutter/material.dart";
-import "package:weather_sasat/helper/navigator.dart";
-
+import "package:speedometer/helper/navigator.dart";
 
 class AppColors {
   static Brightness brightness() {
     if (Navigators.navigatorState.currentContext != null) {
-      return MediaQuery.of(Navigators.navigatorState.currentContext!).platformBrightness;
+      return MediaQuery.of(Navigators.navigatorState.currentContext!)
+          .platformBrightness;
     }
 
     return Brightness.light;

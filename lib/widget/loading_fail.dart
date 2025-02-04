@@ -1,8 +1,8 @@
 
 import "package:flutter/material.dart";
 import "package:lottie/lottie.dart";
-import "package:weather_sasat/helper/app_colors.dart";
-import "package:weather_sasat/helper/dimension.dart";
+import "package:speedometer/helper/app_colors.dart";
+import "package:speedometer/helper/dimension.dart";
 
 
 class LoadingFail extends StatelessWidget {

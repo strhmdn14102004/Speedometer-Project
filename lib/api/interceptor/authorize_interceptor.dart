@@ -1,8 +1,6 @@
-
 import "package:dio/dio.dart";
-import "package:weather_sasat/api/common/general_response.dart";
-import "package:weather_sasat/overlay/overlays.dart";
-
+import "package:speedometer/api/common/general_response.dart";
+import "package:speedometer/overlay/overlays.dart";
 
 class AuthorizationInterceptor extends InterceptorsWrapper {
   @override
@@ -17,7 +15,8 @@ class AuthorizationInterceptor extends InterceptorsWrapper {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (response.statusCode == 200) {
       if (response.data is Map<String, dynamic>) {
-        GeneralResponse generalResponse = GeneralResponse.fromJson(response.data);
+        GeneralResponse generalResponse =
+            GeneralResponse.fromJson(response.data);
 
         if (generalResponse.responseStatus != 0) {
           Overlays.error(message: generalResponse.responseMessage);

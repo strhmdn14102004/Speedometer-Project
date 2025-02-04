@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:weather_sasat/module/home/home_event.dart';
-import 'package:weather_sasat/module/home/home_state.dart';
+import 'package:speedometer/module/home/home_event.dart';
+import 'package:speedometer/module/home/home_state.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   Position? previousPosition;

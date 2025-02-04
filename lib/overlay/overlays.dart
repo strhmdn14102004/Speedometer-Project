@@ -1,8 +1,8 @@
 
 import "package:flutter/material.dart";
-import "package:weather_sasat/helper/navigator.dart";
-import "package:weather_sasat/overlay/error_overlay.dart";
-import "package:weather_sasat/overlay/success_overlay.dart";
+import "package:speedometer/helper/navigator.dart";
+import "package:speedometer/overlay/error_overlay.dart";
+import "package:speedometer/overlay/success_overlay.dart";
 
 
 class Overlays {

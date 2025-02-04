@@ -1,8 +1,8 @@
 
 import "package:flutter/material.dart";
 import "package:lottie/lottie.dart";
-import "package:weather_sasat/helper/dimension.dart";
-import "package:weather_sasat/helper/navigator.dart";
+import "package:speedometer/helper/dimension.dart";
+import "package:speedometer/helper/navigator.dart";
 
 
 class SuccessOverlay extends ModalRoute<void> {

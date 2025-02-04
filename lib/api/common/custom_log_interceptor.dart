@@ -1,10 +1,8 @@
 import "dart:convert";
 
-
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
-import "package:weather_sasat/constant.dart";
-
+import "package:speedometer/constant.dart";
 
 class CustomLogInterceptor extends InterceptorsWrapper {
   @override

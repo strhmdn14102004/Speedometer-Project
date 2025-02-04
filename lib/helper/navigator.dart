@@ -6,7 +6,8 @@ import "package:flutter/material.dart";
 class Navigators {
   static GlobalKey<NavigatorState> navigatorState = GlobalKey<NavigatorState>();
 
-  static Future<T?> push<T extends Object?>(BuildContext context, Widget widget) {
+  static Future<T?> push<T extends Object?>(
+      BuildContext context, Widget widget) {
     return Navigator.of(context).push(
       MaterialPageRoute(
         settings: RouteSettings(
@@ -41,7 +42,8 @@ class Navigators {
         builder: (BuildContext context) {
           return widget;
         },
-      ), (Route route) => false,
+      ),
+      (Route route) => false,
     );
   }
 
@@ -54,6 +56,7 @@ class Navigators {
   }
 
   static void popUntil(BuildContext context, String name) {
-    Navigator.of(context).popUntil((Route route) => StringUtils.equalsIgnoreCase(route.settings.name ?? "", name));
+    Navigator.of(context).popUntil((Route route) =>
+        StringUtils.equalsIgnoreCase(route.settings.name ?? "", name));
   }
 }

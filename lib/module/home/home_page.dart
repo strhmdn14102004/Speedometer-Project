@@ -5,11 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:speedometer/module/home/home_bloc.dart';
+import 'package:speedometer/module/home/home_event.dart';
+import 'package:speedometer/module/home/home_state.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
-
-import 'package:weather_sasat/module/home/home_bloc.dart';
-import 'package:weather_sasat/module/home/home_event.dart';
-import 'package:weather_sasat/module/home/home_state.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -108,9 +107,6 @@ class _HomePageState extends State<HomePage> {
     }
     context.read<DashboardBloc>().add(StartTracking());
   }
-
-
-  
 
   String getGearText(double speed) {
     if (speed >= 1 && speed < 30) {
@@ -459,7 +455,7 @@ class _HomePageState extends State<HomePage> {
                                           final barWidth = (state.speed / 200)
                                                   .clamp(0.0, 1.0) *
                                               constraints.maxWidth;
-    
+
                                           return Container(
                                             width: barWidth,
                                             height: 8,

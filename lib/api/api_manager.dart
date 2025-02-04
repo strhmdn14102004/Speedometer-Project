@@ -4,9 +4,9 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:weather_sasat/api/common/custom_log_interceptor.dart';
-import 'package:weather_sasat/api/interceptor/authorize_interceptor.dart';
-import 'package:weather_sasat/constant.dart';
+import 'package:speedometer/api/common/custom_log_interceptor.dart';
+import 'package:speedometer/api/interceptor/authorize_interceptor.dart';
+import 'package:speedometer/constant.dart';
 
 class ApiManager {
   static bool PRIMARY = true;

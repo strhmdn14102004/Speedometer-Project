@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
+import 'package:speedometer/helper/app_colors.dart';
+import 'package:speedometer/helper/dimension.dart';
+import 'package:speedometer/module/home/home_bloc.dart';
+import 'package:speedometer/module/home/home_page.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:weather_sasat/helper/app_colors.dart';
-import 'package:weather_sasat/helper/dimension.dart';
-import 'package:weather_sasat/module/home/home_bloc.dart';
-import 'package:weather_sasat/module/home/home_page.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
-  // Lock orientation to landscape only
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
@@ -65,7 +60,7 @@ class MyApp extends StatelessWidget {
         overlayOpacity: 0.8,
         child: GetMaterialApp(
           scaffoldMessengerKey: rootScaffoldMessengerKey,
-          title: "SpeedoMeter",
+          title: "Speedometer",
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             useMaterial3: true,
