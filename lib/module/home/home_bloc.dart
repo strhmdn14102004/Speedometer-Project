@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:speedometer/api/endpoint/trip_data.dart';
 import 'package:speedometer/module/home/home_event.dart';
 import 'package:speedometer/module/home/home_state.dart';
 
@@ -9,6 +11,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   double fuelLevel = 100.0; // Bahan bakar mulai dari 100%
   double maxSpeed = 0.0;
   DateTime? maxSpeedTimestamp;
+  DateTime? tripStartTime;
+  DateTime? tripEndTime;
+  List<double> speedHistory = [];
+  bool isTripActive = false;
 
   DashboardBloc()
       : super(DashboardLoaded(
@@ -25,6 +31,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       if (!isLocationEnabled) {
         return;
       }
+
+      isTripActive = true;
+      tripStartTime = DateTime.now();
+      speedHistory.clear();
 
       Geolocator.getPositionStream(
         locationSettings:
@@ -55,6 +65,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           maxSpeedTimestamp = DateTime.now();
         }
 
+        speedHistory.add(speed);
         previousPosition = position;
 
         emit(DashboardLoaded(
@@ -69,8 +80,26 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
                   : 0),
           maxSpeed: maxSpeed,
           maxSpeedTimestamp: maxSpeedTimestamp,
+          isTripActive: isTripActive,
         ));
       });
+    });
+
+    on<EndTracking>((event, emit) {
+      isTripActive = false;
+      tripEndTime = DateTime.now();
+      _saveTripData();
+      emit(DashboardLoaded(
+        speed: 0.0,
+        rpm: 0,
+        fuelLevel: fuelLevel,
+        streetName: "Lokasi belum ditemukan",
+        distanceToDestination: totalDistance,
+        estimatedTime: const Duration(minutes: 0),
+        maxSpeed: maxSpeed,
+        maxSpeedTimestamp: maxSpeedTimestamp,
+        isTripActive: isTripActive,
+      ));
     });
   }
 
@@ -94,4 +123,28 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     return true;
   }
+
+  void _saveTripData() {
+    double averageSpeed = speedHistory.isNotEmpty
+        ? speedHistory.reduce((a, b) => a + b) / speedHistory.length
+        : 0.0;
+
+    TripData tripData = TripData(
+      startTime: tripStartTime!,
+      endTime: tripEndTime!,
+      maxSpeed: maxSpeed,
+      averageSpeed: averageSpeed,
+      distance: totalDistance,
+    );
+
+    // Save trip data to local storage (e.g., shared_preferences, sqflite, etc.)
+    _saveTripToLocalStorage(tripData);
+  }
+}
+
+Future<void> _saveTripToLocalStorage(TripData tripData) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<String> trips = prefs.getStringList('trips') ?? [];
+  trips.add(tripData.toJson());
+  await prefs.setStringList('trips', trips);
 }

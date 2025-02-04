@@ -6,6 +6,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:speedometer/helper/app_colors.dart';
 import 'package:speedometer/helper/dimension.dart';
+import 'package:speedometer/module/drag_mode/bloc/drag_bloc.dart';
 import 'package:speedometer/module/home/home_bloc.dart';
 import 'package:speedometer/module/home/home_page.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (BuildContext context) => DashboardBloc(),
         ),
+        BlocProvider(
+          create: (BuildContext context) => SpeedBloc(),
+        )
       ],
       child: GlobalLoaderOverlay(
         useDefaultLoading: false,

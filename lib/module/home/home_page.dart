@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:speedometer/module/home/home_bloc.dart';
 import 'package:speedometer/module/home/home_event.dart';
 import 'package:speedometer/module/home/home_state.dart';
+import 'package:speedometer/module/menu/menu.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
 class HomePage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   double totalFuelConsumed = 0.0;
   double highestSpeed = 0.0;
   DateTime? highestSpeedTime;
+  bool _isTracking = false;
 
   Color getRpmColor(int rpm) {
     if (rpm < 1000) return Colors.green;
@@ -166,325 +168,324 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: BlocBuilder<DashboardBloc, DashboardState>(
-          builder: (context, state) {
-            if (state is DashboardLoaded) {
-              return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[900],
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        getGearText(state.speed),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      "${state.rpm} rpm",
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Container(
-                                  width: double.infinity,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                    gradient: LinearGradient(
-                                      colors: getRPMColors(state.rpm),
-                                      stops: [
-                                        0.0,
-                                        (state.rpm / 6000).clamp(0.0, 1.0),
-                                        1.0
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[900],
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Row(
+        body: SafeArea(
+          child: BlocBuilder<DashboardBloc, DashboardState>(
+            builder: (context, state) {
+              if (state is DashboardLoaded) {
+                return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Column(
-                                        children: [
-                                          Text(
-                                            "${state.estimatedTime.inMinutes}",
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[900],
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: Text(
+                                          getGearText(state.speed),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          const Text(
-                                            "min",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                      StreamBuilder<DateTime>(
-                                        stream: _timeStream,
-                                        builder: (context, snapshot) {
-                                          final now =
-                                              snapshot.data ?? DateTime.now();
-                                          return Column(
-                                            children: [
-                                              Text(
-                                                "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}",
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Text(
-                                                _timeZoneLabel,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            "${state.distanceToDestination.toStringAsFixed(2)}",
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const Text(
-                                            "Km",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ],
+                                      Text(
+                                        "${state.rpm} Rpm",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            state.speed.toStringAsFixed(0),
-                            style: TextStyle(
-                              color: getSpeedColor(state
-                                  .speed), // Warna dinamis berdasarkan kecepatan
-                              fontSize: 80,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Text(
-                            'km/h',
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            _showFuelDialog(context, state);
-                                          },
-                                          child: Icon(Icons.local_gas_station,
-                                              color: getFuelIconColor(
-                                                  state.fuelLevel)),
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          "${state.fuelLevel.toStringAsFixed(0)}%",
-                                          style: const TextStyle(),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8, // Lebar indikator
-                                      height: 10, // Tinggi indikator
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            5), // Membulatkan sisi indikator
-                                        color: Colors.grey[
-                                            800], // Background abu-abu untuk bar kosong
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          FractionallySizedBox(
-                                            widthFactor: state.fuelLevel /
-                                                100, // Proporsi berdasarkan fuel level
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(
-                                                    5), // Membulatkan sisi gradasi
-                                                gradient: LinearGradient(
-                                                  colors: getFuelGradient(state
-                                                      .fuelLevel), // Warna dinamis
-                                                  stops: const [
-                                                    0.0,
-                                                    1.0
-                                                  ], // Titik perubahan warna
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 8,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      gradient: LinearGradient(
+                                        colors: getRPMColors(state.rpm),
+                                        stops: [
+                                          0.0,
+                                          (state.rpm / 6000).clamp(0.0, 1.0),
+                                          1.0
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(height: 20),
-                                    Row(
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[900],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Icon(Icons.speed_rounded,
-                                            color: Colors.red),
-                                        const SizedBox(width: 5),
                                         Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
                                           children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "Kecepatan Terakhir : ",
-                                                  style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  "${state.speed.toStringAsFixed(0)} km/h",
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ],
+                                            Text(
+                                              "${state.estimatedTime.inMinutes}",
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                            const Text(
+                                              "Min",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                        StreamBuilder<DateTime>(
+                                          stream: _timeStream,
+                                          builder: (context, snapshot) {
+                                            final now =
+                                                snapshot.data ?? DateTime.now();
+                                            return Column(
                                               children: [
-                                                const Text(
-                                                  "Data Tanggal : ",
-                                                  style: TextStyle(
-                                                      fontSize: 16,
+                                                Text(
+                                                  "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}",
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
                                                 Text(
-                                                  "${state.maxSpeedTimestamp ?? 'belum ada'}",
+                                                  _timeZoneLabel,
                                                   style: const TextStyle(
-                                                    fontSize: 16,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                               ],
+                                            );
+                                          },
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              "${state.distanceToDestination.toStringAsFixed(2)}",
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const Text(
+                                              "Km",
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ],
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      width: double.infinity,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: Colors
-                                            .grey[800], // Background bar kosong
-                                        borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              state.speed.toStringAsFixed(0),
+                              style: TextStyle(
+                                color: getSpeedColor(state
+                                    .speed), // Warna dinamis berdasarkan kecepatan
+                                fontSize: 80,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              'km/h',
+                              style: TextStyle(
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              _showFuelDialog(context, state);
+                                            },
+                                            child: Icon(Icons.local_gas_station,
+                                                color: getFuelIconColor(
+                                                    state.fuelLevel)),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            "${state.fuelLevel.toStringAsFixed(0)}%",
+                                            style: const TextStyle(),
+                                          ),
+                                        ],
                                       ),
-                                      child: LayoutBuilder(
-                                        builder: (context, constraints) {
-                                          final barWidth = (state.speed / 200)
-                                                  .clamp(0.0, 1.0) *
-                                              constraints.maxWidth;
-
-                                          return Container(
-                                            width: barWidth,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              gradient: LinearGradient(
-                                                colors: getSpeedGradient(state
-                                                    .speed), // Warna dinamis
-                                                stops: const [0.0, 1.0],
+                                      const SizedBox(height: 8),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.8, // Lebar indikator
+                                        height: 10, // Tinggi indikator
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              5), // Membulatkan sisi indikator
+                                          color: Colors.grey[
+                                              800], // Background abu-abu untuk bar kosong
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            FractionallySizedBox(
+                                              widthFactor: state.fuelLevel /
+                                                  100, // Proporsi berdasarkan fuel level
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5), // Membulatkan sisi gradasi
+                                                  gradient: LinearGradient(
+                                                    colors: getFuelGradient(state
+                                                        .fuelLevel), // Warna dinamis
+                                                    stops: const [
+                                                      0.0,
+                                                      1.0
+                                                    ], // Titik perubahan warna
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          );
-                                        },
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ]))
-                        ],
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Icon(Icons.speed_rounded,
+                                              color: Colors.red),
+                                          const SizedBox(width: 5),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Text(
+                                                    "Kecepatan Terakhir : ",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    "${state.speed.toStringAsFixed(0)} km/h",
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Container(
+                                        width: double.infinity,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[
+                                              800], // Background bar kosong
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                            final barWidth = (state.speed / 200)
+                                                    .clamp(0.0, 1.0) *
+                                                constraints.maxWidth;
+
+                                            return Container(
+                                              width: barWidth,
+                                              height: 8,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                gradient: LinearGradient(
+                                                  colors: getSpeedGradient(state
+                                                      .speed), // Warna dinamis
+                                                  stops: const [0.0, 1.0],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ]))
+                          ],
+                        ),
                       ),
-                    ),
-                  ]);
-            }
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            );
-          },
+                    ]);
+              }
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              );
+            },
+          ),
         ),
-      ),
-    );
+        floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: Colors.grey[900],
+          onPressed: () {
+            Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MenuPage()));
+          },
+          icon: const Icon(
+            Icons.motorcycle_rounded,
+            color: Colors.white,
+          ),
+          label: const Text(
+            "Mode",
+            style: TextStyle(color: Colors.white),
+          ),
+        ));
   }
 
   void _showFuelDialog(BuildContext context, DashboardLoaded state) {

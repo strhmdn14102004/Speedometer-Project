@@ -9,6 +9,7 @@ class DashboardLoaded extends DashboardState {
   final Duration estimatedTime;
   final double maxSpeed;
   final DateTime? maxSpeedTimestamp;
+  final bool isTripActive;
 
   DashboardLoaded({
     required this.speed,
@@ -19,5 +20,6 @@ class DashboardLoaded extends DashboardState {
     required this.estimatedTime,
     required this.maxSpeed,
     this.maxSpeedTimestamp,
+    this.isTripActive = false,
   });
 }
