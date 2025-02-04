@@ -4,6 +4,6 @@ class Parameter {
 }
 
 class ApiUrl {
-  static String MAIN_BASE = "https://posdemo.sisapp.com:8443/web-order/api/v1/";
-  static String SECONDARY_BASE = "https://posdemo.sisapp.com:8443/web-order/api/v1/";
+  static String MAIN_BASE = "";
+  static String SECONDARY_BASE = "";
 }
