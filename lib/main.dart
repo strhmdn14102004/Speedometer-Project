@@ -9,6 +9,7 @@ import 'package:speedometer/helper/dimension.dart';
 import 'package:speedometer/module/drag_mode/bloc/drag_bloc.dart';
 import 'package:speedometer/module/home/home_bloc.dart';
 import 'package:speedometer/module/home/home_page.dart';
+import 'package:speedometer/module/touring_mode/bloc/touring_bloc.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
 void main() {
@@ -21,6 +22,7 @@ void main() {
 
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -35,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (BuildContext context) => SpeedBloc(),
+        ),
+         BlocProvider(
+          create: (BuildContext context) => TouringBloc(),
         )
       ],
       child: GlobalLoaderOverlay(

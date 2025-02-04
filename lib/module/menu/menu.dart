@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:speedometer/module/drag_mode/bloc/drag_page.dart';
+import 'package:speedometer/module/touring_mode/bloc/touring_page.dart';
 
 class MenuPage extends StatefulWidget {
   @override
@@ -58,10 +59,10 @@ class _MenuPageState extends State<MenuPage> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => TouringModePage()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TouringModePage()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orangeAccent,
