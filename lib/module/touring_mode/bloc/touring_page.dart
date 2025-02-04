@@ -18,10 +18,10 @@ class _TouringModePageState extends State<TouringModePage> {
   @override
   void initState() {
     super.initState();
-     _checkAndRequestStoragePermission();
+    _checkAndRequestStoragePermission();
   }
 
-    Future<void> _checkAndRequestStoragePermission() async {
+  Future<void> _checkAndRequestStoragePermission() async {
     if (await Permission.manageExternalStorage.isGranted) {
       setState(() {
         _permissionsGranted = true;
@@ -51,7 +51,6 @@ class _TouringModePageState extends State<TouringModePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: SafeArea(
         child: Row(
           children: [
@@ -93,20 +92,26 @@ class _TouringModePageState extends State<TouringModePage> {
                                       title: Text(
                                         fileName,
                                         style: const TextStyle(
-                                            fontSize: 14, color: Colors.white),
+                                          fontSize: 14,
+                                        ),
                                       ),
                                       trailing: IconButton(
                                         icon: Icon(
                                           currentTrack == filePath && isPlaying
                                               ? Icons.pause
                                               : Icons.play_arrow,
-                                          color: Colors.white,
+                                          color: Colors.grey,
                                         ),
                                         onPressed: () {
-                                          if (currentTrack == filePath && isPlaying) {
-                                            context.read<TouringBloc>().add(PauseMusic());
+                                          if (currentTrack == filePath &&
+                                              isPlaying) {
+                                            context
+                                                .read<TouringBloc>()
+                                                .add(PauseMusic());
                                           } else {
-                                            context.read<TouringBloc>().add(PlayMusic(filePath));
+                                            context
+                                                .read<TouringBloc>()
+                                                .add(PlayMusic(filePath));
                                           }
                                         },
                                       ),
@@ -126,18 +131,24 @@ class _TouringModePageState extends State<TouringModePage> {
                                       const SizedBox(height: 10),
                                       Text(
                                         'Now Playing: $currentTrack',
-                                        style: const TextStyle(color: Colors.white),
+                                        style: const TextStyle(),
                                       ),
                                       IconButton(
                                         icon: Icon(
-                                          isPlaying ? Icons.pause : Icons.play_arrow,
-                                          color: Colors.white,
+                                          isPlaying
+                                              ? Icons.pause
+                                              : Icons.play_arrow,
+                                          color: Colors.grey,
                                         ),
                                         onPressed: () {
                                           if (isPlaying) {
-                                            context.read<TouringBloc>().add(PauseMusic());
+                                            context
+                                                .read<TouringBloc>()
+                                                .add(PauseMusic());
                                           } else {
-                                            context.read<TouringBloc>().add(PlayMusic(currentTrack!));
+                                            context
+                                                .read<TouringBloc>()
+                                                .add(PlayMusic(currentTrack!));
                                           }
                                         },
                                       ),
@@ -167,14 +178,12 @@ class _TouringModePageState extends State<TouringModePage> {
                         style: const TextStyle(
                           fontSize: 80,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
                         ),
                       ),
                       const Text(
                         'km/h',
                         style: TextStyle(
                           fontSize: 24,
-                          color: Colors.white70,
                         ),
                       ),
                     ],

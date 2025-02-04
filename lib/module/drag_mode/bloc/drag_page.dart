@@ -39,6 +39,7 @@ class _DragModePageState extends State<DragModePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Drag Mode'),
+        centerTitle: true,
       ),
       body: Center(
         child: Padding(
@@ -65,12 +66,24 @@ class _DragModePageState extends State<DragModePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey[900],
+                          ),
                           onPressed: () => _shareSessionResult(sessionResult),
-                          child: const Text('Bagikan Hasil Sesi'),
+                          child: const Text(
+                            'Bagikan Hasil Sesi',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey[900],
+                          ),
                           onPressed: _resetSession,
-                          child: const Text('Done'),
+                          child: const Text(
+                            'Done',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),
@@ -96,6 +109,9 @@ class _DragModePageState extends State<DragModePage> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[900],
+                    ),
                     onPressed: () {
                       setState(() {
                         _isTracking = !_isTracking;
@@ -106,7 +122,10 @@ class _DragModePageState extends State<DragModePage> {
                         context.read<SpeedBloc>().add(StopTracking());
                       }
                     },
-                    child: Text(_isTracking ? 'Stop' : 'Start'),
+                    child: Text(
+                      _isTracking ? 'Stop' : 'Start',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               );
