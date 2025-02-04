@@ -39,7 +39,10 @@ class _MenuPageState extends State<MenuPage> {
                     padding: EdgeInsets.all(16.0),
                     child: Text(
                       'Drag Mode',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -61,7 +64,8 @@ class _MenuPageState extends State<MenuPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TouringModePage()),
+                      MaterialPageRoute(
+                          builder: (context) => TouringModePage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -71,7 +75,10 @@ class _MenuPageState extends State<MenuPage> {
                     padding: EdgeInsets.all(16.0),
                     child: Text(
                       'Touring Mode',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
