@@ -64,7 +64,7 @@ class _TouringModePageState extends State<TouringModePage> {
                   if (state is TouringMusicError) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                          content:  Text("Error loading music files.")),
+                          content: Text("Error loading music files.")),
                     );
                   }
                 },
@@ -148,8 +148,8 @@ class _TouringModePageState extends State<TouringModePage> {
         ),
         const Padding(
           padding: EdgeInsets.all(8.0),
-          child:
-              Text('Pilih Musik Untuk Dimainkan :', style: TextStyle(fontSize: 16)),
+          child: Text('Pilih Musik Untuk Dimainkan :',
+              style: TextStyle(fontSize: 16)),
         ),
         Expanded(
           child: musicFiles.isNotEmpty
@@ -163,14 +163,14 @@ class _TouringModePageState extends State<TouringModePage> {
                         fileName,
                         style: const TextStyle(fontSize: 14),
                       ),
-                        trailing: Icon(
+                      trailing: Icon(
                         currentTrack == filePath && isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow,
+                            ? Icons.pause
+                            : Icons.play_arrow,
                         color: currentTrack == filePath && isPlaying
-                          ? Colors.green
-                          : Colors.green,
-                        ),
+                            ? Colors.green
+                            : Colors.green,
+                      ),
                       onTap: () {
                         setState(() => _showMusicList = false);
                         context.read<TouringBloc>().add(PlayMusic(filePath));
@@ -214,9 +214,7 @@ class _TouringModePageState extends State<TouringModePage> {
               IconButton(
                 icon: Icon(
                   isPlaying ? Icons.pause : Icons.play_arrow,
-                  color:  isPlaying
-                          ? Colors.red
-                          : Colors.green,
+                  color: isPlaying ? Colors.red : Colors.green,
                 ),
                 onPressed: () {
                   if (isPlaying) {
@@ -227,7 +225,7 @@ class _TouringModePageState extends State<TouringModePage> {
                 },
               ),
               IconButton(
-                icon:  Icon(Icons.arrow_back, color: Colors.grey),
+                icon: Icon(Icons.arrow_back, color: Colors.grey),
                 onPressed: () {
                   setState(() => _showMusicList = true);
                   _reloadMusicList();

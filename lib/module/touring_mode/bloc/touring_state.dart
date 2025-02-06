@@ -19,6 +19,7 @@ class TouringMusicPlaying extends TouringState {
 
   TouringMusicPlaying(this.currentTrack);
 }
+
 class TouringMusicPaused extends TouringState {
   final String currentTrack;
 
@@ -26,7 +27,5 @@ class TouringMusicPaused extends TouringState {
 }
 
 class TouringMusicError extends TouringState {
-
-
   TouringMusicError();
 }

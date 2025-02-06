@@ -1,4 +1,3 @@
-
 class Parameter {
   static const bool API_PRINT_LOGGING_ENABLED = true;
 }

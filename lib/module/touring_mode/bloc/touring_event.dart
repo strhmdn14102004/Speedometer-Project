@@ -11,4 +11,5 @@ class PlayMusic extends TouringEvent {
 
   PlayMusic(this.filePath);
 }
+
 class PauseMusic extends TouringEvent {}

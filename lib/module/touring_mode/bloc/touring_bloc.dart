@@ -36,6 +36,12 @@ class TouringBloc extends Bloc<TouringEvent, TouringState> {
         final musicDirectories = [
           Directory('/storage/emulated/0/Music'),
           Directory('/storage/emulated/0/Download'),
+          Directory('/storage/emulated/0/Music'),
+          Directory('/storage/emulated/0/'),
+          Directory('/storage/emulated/0/Images'),
+          Directory('/storage/emulated/0/DCIM'),
+          Directory('/storage/emulated/0/Documents'),
+          Directory('/storage/emulated/0/Ringtones'),
         ];
 
         final files = <String>[];
@@ -66,10 +72,11 @@ class TouringBloc extends Bloc<TouringEvent, TouringState> {
       emit(TouringMusicPlaying(_currentTrack!));
     });
 
-   on<PauseMusic>((event, emit) async {
-  await _audioPlayer.pause();
-  emit(TouringMusicPaused(_currentTrack ?? ''));
-});}  
+    on<PauseMusic>((event, emit) async {
+      await _audioPlayer.pause();
+      emit(TouringMusicPaused(_currentTrack ?? ''));
+    });
+  }
 
   @override
   Future<void> close() {
