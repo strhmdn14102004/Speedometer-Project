@@ -475,7 +475,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.grey[900],
           onPressed: () {
             Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MenuPage()));
+                context, MaterialPageRoute(builder: (context) => MenuPage()));
           },
           icon: const Icon(
             Icons.motorcycle_rounded,

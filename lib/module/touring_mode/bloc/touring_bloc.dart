@@ -66,11 +66,10 @@ class TouringBloc extends Bloc<TouringEvent, TouringState> {
       emit(TouringMusicPlaying(_currentTrack!));
     });
 
-    on<PauseMusic>((event, emit) async {
-      await _audioPlayer.pause();
-      emit(TouringMusicPaused(_currentTrack ?? ''));
-    });
-  }
+   on<PauseMusic>((event, emit) async {
+  await _audioPlayer.pause();
+  emit(TouringMusicPaused(_currentTrack ?? ''));
+});}  
 
   @override
   Future<void> close() {

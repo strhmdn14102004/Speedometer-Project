@@ -24,3 +24,9 @@ class TouringMusicPaused extends TouringState {
 
   TouringMusicPaused(this.currentTrack);
 }
+
+class TouringMusicError extends TouringState {
+
+
+  TouringMusicError();
+}
