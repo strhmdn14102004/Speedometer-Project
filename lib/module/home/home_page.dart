@@ -319,9 +319,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             const Text(
-                              'km/h',
+                              'Km/h',
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: 24,fontWeight: FontWeight.bold
                               ),
                             ),
                           ],
@@ -478,7 +478,7 @@ class _HomePageState extends State<HomePage> {
                 context, MaterialPageRoute(builder: (context) => MenuPage()));
           },
           icon: const Icon(
-            Icons.motorcycle_rounded,
+            Icons.fiber_smart_record_outlined,
             color: Colors.white,
           ),
           label: const Text(

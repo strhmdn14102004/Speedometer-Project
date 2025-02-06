@@ -225,7 +225,7 @@ class _TouringModePageState extends State<TouringModePage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.grey),
+                icon: const Icon(Icons.arrow_back, color: Colors.grey),
                 onPressed: () {
                   setState(() => _showMusicList = true);
                   _reloadMusicList();
