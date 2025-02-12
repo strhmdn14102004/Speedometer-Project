@@ -16,7 +16,7 @@ class TouringBloc extends Bloc<TouringEvent, TouringState> {
     on<StartTouring>((event, emit) {
       final positionStream = Geolocator.getPositionStream(
         locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
+          accuracy: LocationAccuracy.bestForNavigation,
         ),
       ).listen((Position position) {
         final speed = position.speed * 3.6; // Convert m/s to km/h

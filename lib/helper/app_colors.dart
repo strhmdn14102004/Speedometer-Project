@@ -25,7 +25,7 @@ class AppColors {
 
   static Color primary() {
     if (darkMode()) {
-      return Color.fromARGB(255, 255, 29, 29);
+      return const Color.fromARGB(255, 255, 29, 29);
     } else {
       return Colors.green;
     }
@@ -57,9 +57,9 @@ class AppColors {
 
   static Color secondary() {
     if (darkMode()) {
-      return Color.fromARGB(255, 255, 255, 255);
+      return const Color.fromARGB(255, 255, 255, 255);
     } else {
-      return Color.fromARGB(255, 255, 0, 0);
+      return const Color.fromARGB(255, 255, 0, 0);
     }
   }
 

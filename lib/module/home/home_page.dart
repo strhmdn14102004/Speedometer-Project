@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speedometer/module/home/home_bloc.dart';
 import 'package:speedometer/module/home/home_event.dart';
@@ -22,7 +21,16 @@ class _HomePageState extends State<HomePage> {
   double totalFuelConsumed = 0.0;
   double highestSpeed = 0.0;
   DateTime? highestSpeedTime;
-  bool _isTracking = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _requestLocationPermission();
+    tz.initializeTimeZones();
+    _timeStream =
+        Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now());
+    context.read<DashboardBloc>().add(StartTracking());
+  }
 
   Color getRpmColor(int rpm) {
     if (rpm < 1000) return Colors.green;
@@ -92,16 +100,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _requestLocationPermission();
-    tz.initializeTimeZones();
-    _timeStream =
-        Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now());
-    context.read<DashboardBloc>().add(StartTracking());
-  }
-
   void _requestLocationPermission() async {
     bool isGranted = await Geolocator.isLocationServiceEnabled();
     if (!isGranted) {
@@ -126,43 +124,6 @@ class _HomePageState extends State<HomePage> {
     } else {
       return "N"; // Default jika kecepatan di luar rentang yang ditentukan
     }
-  }
-
-  Future<void> _getCurrentTimeZone() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-
-      if (placemarks.isNotEmpty) {
-        String? country = placemarks.first.country;
-        String? locality = placemarks.first.locality;
-
-        String timeZoneName = "$locality, $country";
-
-        setState(() {
-          _timeZoneLabel = _convertToIndonesianTimeZone(timeZoneName);
-        });
-      }
-    } catch (e) {
-      print("Error getting time zone: $e");
-    }
-  }
-
-  String _convertToIndonesianTimeZone(String timeZone) {
-    if (timeZone.contains("Jakarta") ||
-        timeZone.contains("Western Indonesia Time")) {
-      return "Wib";
-    } else if (timeZone.contains("Makassar") ||
-        timeZone.contains("Central Indonesia Time")) {
-      return "Wita";
-    } else if (timeZone.contains("Jayapura") ||
-        timeZone.contains("Eastern Indonesia Time")) {
-      return "Wit";
-    }
-    return "Wib"; // Default jika tidak terdeteksi
   }
 
   @override
@@ -321,8 +282,7 @@ class _HomePageState extends State<HomePage> {
                             const Text(
                               'Km/h',
                               style: TextStyle(
-                                fontSize: 24,fontWeight: FontWeight.bold
-                              ),
+                                  fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
