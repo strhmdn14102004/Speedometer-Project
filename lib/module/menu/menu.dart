@@ -44,6 +44,7 @@ class _MenuPageState extends State<MenuPage> {
                             fontSize: 20,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -80,6 +81,7 @@ class _MenuPageState extends State<MenuPage> {
                             fontSize: 20,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -87,6 +89,16 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey[900],
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
         ),
       ),
     );

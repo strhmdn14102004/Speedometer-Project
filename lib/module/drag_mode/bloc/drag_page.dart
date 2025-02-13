@@ -50,7 +50,7 @@ class _DragModePageState extends State<DragModePage> {
           builder: (context, state) {
             if (state is SpeedSessionResult) {
               String sessionResult =
-                  'Hasil Sesi Mode Drag :\n\nKecepatan Maksimal: ${state.maxSpeed.toStringAsFixed(2)} km/h\n'
+                  'Hasil Sesi Mode Drag :\n\nKecepatan Maksimal : ${state.maxSpeed.toStringAsFixed(2)} km/h\n'
                   'Kecepatan Rata-rata : ${state.averageSpeed.toStringAsFixed(2)} km/h\n'
                   'Waktu Mulai : ${DateFormat('HH:mm:ss | dd MMMM yyyy').format(state.startTime)}\n'
                   'Waktu Berhenti : ${DateFormat('HH:mm:ss | dd MMMM yyyy').format(state.stopTime)}';
@@ -60,7 +60,7 @@ class _DragModePageState extends State<DragModePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(sessionResult, style: const TextStyle(fontSize: 16)),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -93,27 +93,28 @@ class _DragModePageState extends State<DragModePage> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
+                SizedBox(
+                  height: 350, // Adjust the height as needed
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: LineChart(
-                      LineChartData(
-                        gridData: const FlGridData(show: true),
-                        titlesData: const FlTitlesData(show: true),
-                        borderData: FlBorderData(show: true),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: speedData,
-                            isCurved: true,
-                            color: Colors.blue,
-                            belowBarData: BarAreaData(
-                                show: true,
-                                color: Colors.blue.withOpacity(0.3)),
-                            dotData: const FlDotData(show: false),
-                          ),
-                        ],
+                  padding: const EdgeInsets.all(10.0),
+                  child: LineChart(
+                    LineChartData(
+                    gridData: const FlGridData(show: true),
+                    titlesData: const FlTitlesData(show: true),
+                    borderData: FlBorderData(show: true),
+                    lineBarsData: [
+                      LineChartBarData(
+                      spots: speedData,
+                      isCurved: true,
+                      color: Colors.blue,
+                      belowBarData: BarAreaData(
+                        show: true,
+                        color: Colors.blue.withOpacity(0.3)),
+                      dotData: const FlDotData(show: false),
                       ),
+                    ],
                     ),
+                  ),
                   ),
                 ),
                 BlocBuilder<SpeedBloc, SpeedState>(
@@ -139,7 +140,7 @@ class _DragModePageState extends State<DragModePage> {
                     );
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isTracking ? Colors.red : Colors.green,

@@ -134,6 +134,16 @@ class _TouringModePageState extends State<TouringModePage> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey[900],
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 
